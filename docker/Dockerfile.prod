@@ -68,8 +68,7 @@ RUN mkdir -p \
     --no-dev \
     --no-interaction \
     --classmap-authoritative \
-    --no-scripts \
- && BROADCAST_CONNECTION=null php artisan package:discover --ansi
+    --no-scripts
 
 FROM node:22-bookworm-slim AS assets
 
@@ -146,6 +145,8 @@ RUN chmod +x /usr/local/bin/geoflow-entrypoint-prod
 
 COPY --from=vendor /app /var/www/html
 COPY --from=assets /app/public/build /var/www/html/public/build
+
+RUN BROADCAST_CONNECTION=null php artisan package:discover --ansi
 
 # 构建时创建存储链接，让非 root 运行进程直接使用挂载的公共存储。
 RUN ln -sT /var/www/html/storage/app/public public/storage \
