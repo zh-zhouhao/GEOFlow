@@ -13,6 +13,19 @@ class AdminUiV3ShellTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        config()->set('geoflow.company', [
+            'phone' => '120XXXXXXXX',
+            'email' => '123456789@qq.com',
+            'address' => '中国北京XXXX',
+            'copyright' => '© XXXXXX有限公司 版权所有',
+            'filing' => 'XXXICP备XXXXXXX号-X',
+        ]);
+    }
+
     public function test_feature_flag_switches_shared_admin_shell(): void
     {
         $admin = $this->admin('shell_owner', 'super_admin');

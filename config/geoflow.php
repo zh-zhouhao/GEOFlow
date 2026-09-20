@@ -74,6 +74,14 @@ return [
 
     // 站点展示名称（页眉、标题等）
     'site_name' => env('SITE_NAME', 'GEOFlow'),
+    // Public and admin company footer details. Keep environment-specific values outside source code.
+    'company' => [
+        'phone' => env('GEOFLOW_COMPANY_PHONE', ''),
+        'email' => env('GEOFLOW_COMPANY_EMAIL', ''),
+        'address' => env('GEOFLOW_COMPANY_ADDRESS', ''),
+        'copyright' => env('GEOFLOW_COMPANY_COPYRIGHT', ''),
+        'filing' => env('GEOFLOW_COMPANY_FILING', ''),
+    ],
     // 站点完整/副标题文案
     'site_full_name' => env('SITE_FULL_NAME', 'GEOFlow'),
     // 站点根 URL，用于生成绝对链接（末尾无斜杠）
