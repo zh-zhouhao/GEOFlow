@@ -88,23 +88,13 @@ class AdminWelcomeModalService
     }
 
     /**
-     * 当当前欢迎/更新版本键与库中已读不一致时：本请求应自动弹出，并写入 `welcome_seen_version` 以免重复打扰。
+     * 版本信息保留为手动查看内容，不在登录后自动打断用户。
      *
      * @param  array<string, mixed>  $welcomeState
      */
     private function prepareAutoOpen(Admin $admin, array $welcomeState): bool
     {
-        $versionKey = $this->welcomeVersionKey($welcomeState);
-        $seen = (string) ($admin->welcome_seen_version ?? '');
-        $shouldAutoOpen = $seen !== $versionKey;
-        if ($shouldAutoOpen) {
-            Admin::query()->whereKey($admin->id)->update([
-                'welcome_seen_version' => $versionKey,
-                'updated_at' => now(),
-            ]);
-        }
-
-        return $shouldAutoOpen;
+        return false;
     }
 
     /**

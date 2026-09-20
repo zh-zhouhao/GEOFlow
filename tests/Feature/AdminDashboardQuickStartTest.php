@@ -297,7 +297,7 @@ class AdminDashboardQuickStartTest extends TestCase
         $this->assertStringNotContainsString('https://configured.example'.$dismissPath, $html);
     }
 
-    public function test_project_intro_auto_opens_once_and_footer_link_remains_available(): void
+    public function test_project_intro_does_not_auto_open_and_footer_link_remains_available(): void
     {
         $admin = Admin::query()->create([
             'username' => 'dashboard_project_intro_admin',
@@ -314,11 +314,8 @@ class AdminDashboardQuickStartTest extends TestCase
 
         $firstHtml = $firstResponse->getContent();
         $this->assertStringContainsString('data-open-admin-welcome', $firstHtml);
-        $this->assertStringContainsString('"shouldAutoOpen":true', $firstHtml);
-        $this->assertSame(
-            'intro:'.config('geoflow.welcome_intro_version'),
-            (string) $admin->fresh()?->welcome_seen_version
-        );
+        $this->assertStringContainsString('"shouldAutoOpen":false', $firstHtml);
+        $this->assertNull($admin->fresh()?->welcome_seen_version);
 
         $secondHtml = $this->actingAs($admin->fresh(), 'admin')
             ->get(route('admin.dashboard'))
