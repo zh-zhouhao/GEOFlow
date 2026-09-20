@@ -88,6 +88,7 @@
                         @endif
                         @yield('content')
                     </div>
+                    @include('admin.partials.footer')
                 </main>
             </div>
         </div>
@@ -114,6 +115,7 @@
                 </div>
             @endif
             @yield('content')
+            @include('admin.partials.footer')
         </main>
         @include('admin.partials.legacy-runtime-config')
         <x-admin.action-dialog />

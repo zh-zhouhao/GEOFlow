@@ -58,31 +58,17 @@ class AdminUiV3ShellTest extends TestCase
             $this->assertSame(1, $footers?->length);
             $footer = $footers?->item(0);
             $this->assertInstanceOf(\DOMElement::class, $footer);
-            $this->assertStringContainsString('GEOFlow v3.0.0', $footer->textContent);
-            $this->assertStringContainsString('© 2026 Yao Jingang', $footer->textContent);
-            $this->assertStringContainsString('AGPL-3.0', $footer->textContent);
-            $this->assertSame(1, $xpath->query('.//button[@data-open-admin-welcome]', $footer)?->length);
+            $this->assertStringContainsString('电话：15979004534', $footer->textContent);
+            $this->assertStringContainsString('邮箱：847120085@qq.com', $footer->textContent);
+            $this->assertStringContainsString('赣ICP备2026022797号-1', $footer->textContent);
+            $this->assertStringNotContainsString('GEOFlow v3.0.0', $footer->textContent);
+            $this->assertStringNotContainsString('AGPL-3.0', $footer->textContent);
+            $this->assertSame(0, $xpath->query('.//a', $footer)?->length);
+            $this->assertSame(0, $xpath->query('.//button[@data-open-admin-welcome]', $footer)?->length);
             $this->assertSame(
                 $v3Enabled ? 1 : 0,
                 $xpath->query('//main[@id="main-content"]//*[@data-admin-product-footer]')?->length,
             );
-
-            $expectedLinks = [
-                'https://github.com/yaojingang/GEOFlow/releases',
-                'https://github.com/yaojingang/GEOFlow/blob/main/LICENSE',
-                'https://github.com/yaojingang/GEOFlow/blob/main/docs/CHANGELOG.md',
-                'https://github.com/yaojingang/GEOFlow',
-                'https://x.com/yaojingang',
-                'https://github.com/yaojingang/GEOFlow/wiki',
-            ];
-            $links = $xpath->query('.//a', $footer);
-
-            $this->assertSame(count($expectedLinks), $links?->length);
-            foreach ($links ?: [] as $link) {
-                $this->assertSame('_blank', $link->attributes?->getNamedItem('target')?->nodeValue);
-                $this->assertSame('noopener noreferrer', $link->attributes?->getNamedItem('rel')?->nodeValue);
-                $this->assertContains($link->attributes?->getNamedItem('href')?->nodeValue, $expectedLinks);
-            }
 
             $this->assertSame($v3Enabled ? 0 : 1, substr_count($html, 'window.ADMIN_BASE_PATH ='));
         }

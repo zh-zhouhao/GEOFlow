@@ -15,7 +15,7 @@ class SiteFilingSettingsTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_admin_can_save_filing_settings_and_the_default_footer_links_the_filing_number(): void
+    public function test_admin_can_save_filing_settings_without_overriding_the_company_footer(): void
     {
         $this->withoutMiddleware(ValidateCsrfToken::class);
 
@@ -49,9 +49,13 @@ class SiteFilingSettingsTest extends TestCase
 
         $this->get(route('site.home'))
             ->assertOk()
-            ->assertSee('京ICP备12345678号-1')
-            ->assertSee('href="https://beian.miit.gov.cn/"', false)
-            ->assertSee('rel="nofollow noopener noreferrer"', false);
+            ->assertSee('电话：15979004534')
+            ->assertSee('邮箱：847120085@qq.com')
+            ->assertSee('赣ICP备2026022797号-1')
+            ->assertDontSee('京ICP备12345678号-1')
+            ->assertDontSee('href="tel:', false)
+            ->assertDontSee('href="mailto:', false)
+            ->assertDontSee('href="https://beian.miit.gov.cn/"', false);
     }
 
     public function test_admin_rejects_an_invalid_filing_url(): void
@@ -74,7 +78,7 @@ class SiteFilingSettingsTest extends TestCase
         ]);
     }
 
-    public function test_frontend_hides_the_filing_link_when_the_filing_information_is_blank(): void
+    public function test_frontend_keeps_the_company_filing_text_when_the_configurable_filing_is_blank(): void
     {
         SiteSetting::query()->updateOrCreate(
             ['setting_key' => 'filing_info'],
@@ -88,6 +92,7 @@ class SiteFilingSettingsTest extends TestCase
 
         $this->get(route('site.home'))
             ->assertOk()
+            ->assertSee('赣ICP备2026022797号-1')
             ->assertDontSee('https://beian.miit.gov.cn/', false);
     }
 
@@ -114,8 +119,9 @@ class SiteFilingSettingsTest extends TestCase
 
             $this->get(route('site.home'))
                 ->assertOk()
-                ->assertSee('京ICP备12345678号-1')
-                ->assertSee('href="https://beian.miit.gov.cn/"', false);
+                ->assertSee('赣ICP备2026022797号-1')
+                ->assertDontSee('京ICP备12345678号-1')
+                ->assertDontSee('href="https://beian.miit.gov.cn/"', false);
         }
     }
 
