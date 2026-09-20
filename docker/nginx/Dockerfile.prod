@@ -24,5 +24,9 @@ COPY --from=assets /app/public/build /var/www/html/public/build
 COPY docker/nginx/default.conf.template /etc/nginx/templates/default.conf.template
 COPY docker/nginx/geoflow-app.conf /etc/nginx/snippets/geoflow-app.conf
 
+# Normalize static file permissions for the nginx worker.
+RUN find /var/www/html/public -type d -exec chmod 755 {} + \
+ && find /var/www/html/public -type f -exec chmod 644 {} +
+
 RUN rm -f /var/www/html/public/storage \
     && ln -s ../storage/app/public /var/www/html/public/storage
