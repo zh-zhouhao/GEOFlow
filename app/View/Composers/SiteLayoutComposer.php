@@ -27,9 +27,15 @@ final class SiteLayoutComposer
         $siteName = (string) ($map['site_name'] ?? config('geoflow.site_name', config('app.name')));
         $siteLogo = (string) ($map['site_logo'] ?? '');
         $siteFavicon = (string) ($map['site_favicon'] ?? '');
-        $copyright = (string) ($map['copyright_info'] ?? '');
-        $filingInfo = trim((string) ($map['filing_info'] ?? ''));
-        $filingUrl = trim((string) ($map['filing_url'] ?? ''));
+        $copyright = array_key_exists('copyright_info', $map)
+            ? (string) $map['copyright_info']
+            : '© 江西格兰碧科技技术有限公司 版权所有';
+        $filingInfo = array_key_exists('filing_info', $map)
+            ? trim((string) $map['filing_info'])
+            : '赣ICP备2026022797号-1';
+        $filingUrl = array_key_exists('filing_url', $map)
+            ? trim((string) $map['filing_url'])
+            : 'https://beian.miit.gov.cn/';
         $analyticsCode = app(SiteThemePreviewContext::class)->isActive() ? '' : (string) ($map['analytics_code'] ?? '');
 
         $categories = collect();

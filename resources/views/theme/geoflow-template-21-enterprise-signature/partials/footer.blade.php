@@ -30,8 +30,7 @@
 
         <div class="ent-footer__bottom">
             <div>
-                {{ $footerCopyright !== '' ? $footerCopyright : '© '.date('Y').' '.$siteName.'. All rights reserved.' }}
-                @include('site.partials.footer-filing')
+                @include('site.partials.company-footer')
             </div>
             <span>Built with GEOFlow · Enterprise Signature 21</span>
         </div>

@@ -222,8 +222,7 @@ BLADE;
         return <<<'BLADE'
 <footer class="rep-footer">
     <div class="rep-shell">
-        <div>{{ $siteTitle ?? config('app.name') }}</div>
-        @include('site.partials.footer-filing')
+        @include('site.partials.company-footer')
     </div>
 </footer>
 BLADE;
