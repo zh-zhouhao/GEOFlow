@@ -18,12 +18,13 @@ class AdminUiV3ShellTest extends TestCase
         parent::setUp();
 
         config()->set('geoflow.company', [
-            'phone' => '120XXXXXXXX',
-            'email' => '123456789@qq.com',
-            'address' => '中国北京XXXX',
-            'copyright' => '© XXXXXX有限公司 版权所有',
-            'filing' => 'XXXICP备XXXXXXX号-X',
+            'phone' => '15979004534',
+            'email' => '847120085@qq.com',
+            'address' => '江西省萍乡市萍乡经济技术开发区市府西路623号金融综合体3号楼，中国（萍乡）跨境电子商务综合试验区2楼2015',
+            'copyright' => '© 江西格兰碧科技技术有限公司 版权所有',
+            'filing' => '赣ICP备2026022797号-1',
         ]);
+        config()->set('geoflow.optional_admin_entries_enabled', true);
     }
 
     public function test_feature_flag_switches_shared_admin_shell(): void
@@ -172,6 +173,22 @@ class AdminUiV3ShellTest extends TestCase
             ->getContent();
 
         $this->assertUpdateCenterLink($updateHtml, true);
+    }
+
+    public function test_disabled_optional_entries_hide_system_update_navigation(): void
+    {
+        config([
+            'geoflow.admin_ui_v3_enabled' => true,
+            'geoflow.optional_admin_entries_enabled' => false,
+        ]);
+        $admin = $this->admin('hidden_optional_entries_owner', 'super_admin');
+
+        $this->withSession([Admin::AUTH_VERSION_SESSION_KEY => 1])
+            ->actingAs($admin, 'admin')
+            ->get(route('admin.site-settings.index'))
+            ->assertOk()
+            ->assertDontSee(__('admin.ui_v3.system_updates'))
+            ->assertDontSee('data-system-update-link', false);
     }
 
     public function test_ai_workspace_renders_the_help_assistant_surface(): void

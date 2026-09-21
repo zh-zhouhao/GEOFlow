@@ -78,14 +78,25 @@ final class AdminUiRegistry
     /** @return list<array{key:string,label_key:string,route:string,patterns:list<string>,protected:bool}> */
     private function settingsSections(): array
     {
-        return [
+        $sections = [
             ['key' => 'site', 'label_key' => 'admin.ui_v3.settings_site_brand', 'route' => 'admin.site-settings.index', 'patterns' => ['admin.site-settings.index'], 'protected' => false],
             ['key' => 'theme', 'label_key' => 'admin.ui_v3.settings_home_theme', 'route' => 'admin.site-settings.homepage-modules.edit', 'patterns' => ['admin.site-settings.homepage*', 'admin.site-settings.theme-replications.*', 'admin.site-settings.theme-packages.*', 'admin.site-theme-replications.*'], 'protected' => false],
             ['key' => 'forms', 'label_key' => 'admin.ui_v3.settings_forms_leads', 'route' => 'admin.lead-forms.index', 'patterns' => ['admin.lead-forms.*', 'admin.leads.*'], 'protected' => false],
             ['key' => 'users', 'label_key' => 'admin.ui_v3.users_permissions', 'route' => 'admin.admin-users.index', 'patterns' => ['admin.admin-users.*', 'admin.api-tokens.*'], 'protected' => true],
             ['key' => 'security', 'label_key' => 'admin.ui_v3.security_audit', 'route' => 'admin.security-settings.index', 'patterns' => ['admin.security-settings.*', 'admin.site-settings.sensitive-words', 'admin.admin-activity-logs'], 'protected' => false],
-            ['key' => 'updates', 'label_key' => 'admin.ui_v3.system_updates', 'route' => 'admin.system-updates.index', 'patterns' => ['admin.system-updates.*'], 'protected' => true],
         ];
+
+        if (config('geoflow.optional_admin_entries_enabled', false)) {
+            $sections[] = [
+                'key' => 'updates',
+                'label_key' => 'admin.ui_v3.system_updates',
+                'route' => 'admin.system-updates.index',
+                'patterns' => ['admin.system-updates.*'],
+                'protected' => true,
+            ];
+        }
+
+        return $sections;
     }
 
     /** @return list<array{key:string,label_key:string,route:string,patterns:list<string>,protected:bool}> */

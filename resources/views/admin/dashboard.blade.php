@@ -677,6 +677,7 @@
             @endforeach
         </section>
 
+        @if (config('geoflow.optional_admin_entries_enabled', false))
         <section>
             <div class="mb-5">
                 <h2 class="text-xl font-semibold text-gray-900">{{ __('admin.dashboard.skill_resources.title') }}</h2>
@@ -703,5 +704,6 @@
                 @endforeach
             </div>
         </section>
+        @endif
     </div>
 @endsection

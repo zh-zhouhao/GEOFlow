@@ -11,6 +11,12 @@ class AdminDashboardQuickStartTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        config()->set('geoflow.optional_admin_entries_enabled', true);
+    }
+
     public function test_dashboard_shows_scenario_navigation_without_data_widgets(): void
     {
         $admin = Admin::query()->create([
@@ -324,10 +330,10 @@ class AdminDashboardQuickStartTest extends TestCase
 
         $this->assertStringContainsString('data-open-admin-welcome', $secondHtml);
         $this->assertStringContainsString('"shouldAutoOpen":false', $secondHtml);
-        $this->assertStringContainsString(__('admin.footer.project_intro_link'), $secondHtml);
+        $this->assertStringNotContainsString(__('admin.footer.project_intro_link'), $secondHtml);
     }
 
-    public function test_admin_footer_links_to_locale_specific_help_docs(): void
+    public function test_admin_footer_hides_project_links(): void
     {
         $admin = Admin::query()->create([
             'username' => 'dashboard_help_docs_admin',
@@ -343,13 +349,8 @@ class AdminDashboardQuickStartTest extends TestCase
             ->assertOk()
             ->getContent();
 
-        $this->assertStringContainsString(__('admin.footer.help_docs_link'), $zhHtml);
-        $this->assertStringContainsString('https://github.com/yaojingang/GEOFlow/wiki', $zhHtml);
-        $this->assertStringNotContainsString('https://github.com/yaojingang/GEOFlow/wiki/Home-English', $zhHtml);
-        $this->assertStringContainsString(
-            'https://github.com/yaojingang/GEOFlow/blob/main/docs/CHANGELOG.md',
-            $zhHtml,
-        );
+        $this->assertStringNotContainsString(__('admin.footer.help_docs_link'), $zhHtml);
+        $this->assertStringNotContainsString('https://github.com/yaojingang/GEOFlow/wiki', $zhHtml);
 
         session(['locale' => 'en']);
 
@@ -358,11 +359,28 @@ class AdminDashboardQuickStartTest extends TestCase
             ->assertOk()
             ->getContent();
 
-        $this->assertStringContainsString('Help docs', $enHtml);
-        $this->assertStringContainsString('https://github.com/yaojingang/GEOFlow/wiki/Home-English', $enHtml);
-        $this->assertStringContainsString(
-            'https://github.com/yaojingang/GEOFlow/blob/main/docs/CHANGELOG_en.md',
-            $enHtml,
-        );
+        $this->assertStringNotContainsString('Help docs', $enHtml);
+        $this->assertStringNotContainsString('https://github.com/yaojingang/GEOFlow/wiki/Home-English', $enHtml);
+    }
+
+    public function test_dashboard_hides_optional_entries_when_the_feature_flag_is_disabled(): void
+    {
+        config()->set('geoflow.optional_admin_entries_enabled', false);
+        $admin = Admin::query()->create([
+            'username' => 'dashboard_optional_entries_admin',
+            'password' => 'secret-123',
+            'email' => 'dashboard-optional-entries@example.com',
+            'display_name' => 'Optional Entries Admin',
+            'role' => 'super_admin',
+            'status' => 'active',
+        ]);
+
+        $this->actingAs($admin, 'admin')
+            ->get(route('admin.dashboard'))
+            ->assertOk()
+            ->assertDontSee(__('admin.dashboard.skill_resources.title'))
+            ->assertDontSee(__('admin.dashboard.skill_resources.template_title'))
+            ->assertDontSee(__('admin.dashboard.skill_resources.design_title'))
+            ->assertDontSee(__('admin.dashboard.skill_resources.cli_title'));
     }
 }

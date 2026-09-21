@@ -99,18 +99,22 @@
                         'iconClass' => 'bg-emerald-50 text-emerald-600 ring-emerald-100',
                         'action' => __('admin.site_settings.manage_module'),
                     ],
-                    [
-                        'title' => __('admin.ui_v3.system_updates'),
-                        'desc' => __('admin.ui_v3.system_updates_hint'),
-                        'href' => route('admin.system-updates.index'),
-                        'target' => null,
-                        'icon' => 'refresh-cw',
-                        'iconClass' => 'bg-violet-50 text-violet-600 ring-violet-100',
-                        'action' => __('admin.site_settings.manage_module'),
-                    ],
                 ],
             ],
         ];
+
+        if (config('geoflow.optional_admin_entries_enabled', false)) {
+            $systemGroupIndex = array_key_last($siteSettingsGroupRows);
+            $siteSettingsGroupRows[$systemGroupIndex][0]['items'][] = [
+                'title' => __('admin.ui_v3.system_updates'),
+                'desc' => __('admin.ui_v3.system_updates_hint'),
+                'href' => route('admin.system-updates.index'),
+                'target' => null,
+                'icon' => 'refresh-cw',
+                'iconClass' => 'bg-violet-50 text-violet-600 ring-violet-100',
+                'action' => __('admin.site_settings.manage_module'),
+            ];
+        }
     }
 @endphp
 

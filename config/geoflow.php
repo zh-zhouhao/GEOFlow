@@ -74,6 +74,11 @@ return [
 
     // 站点展示名称（页眉、标题等）
     'site_name' => env('SITE_NAME', 'GEOFlow'),
+    // Optional admin entry points remain available by route when hidden from navigation.
+    'optional_admin_entries_enabled' => filter_var(
+        env('GEOFLOW_OPTIONAL_ADMIN_ENTRIES_ENABLED', false),
+        FILTER_VALIDATE_BOOLEAN,
+    ),
     // Public and admin company footer details. Keep environment-specific values outside source code.
     'company' => [
         'phone' => env('GEOFLOW_COMPANY_PHONE', ''),

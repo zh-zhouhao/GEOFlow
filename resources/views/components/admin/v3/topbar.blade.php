@@ -37,7 +37,7 @@
     <div class="gf-topbar__actions">
         <button class="gf-button gf-button--small gf-pwa-install" type="button" data-pwa-install hidden aria-label="{{ __('admin.ui_v3.install_workbench_label') }}"><i data-lucide="app-window"></i><span>{{ __('admin.ui_v3.install_workbench') }}</span></button>
         <div class="gf-popover-wrap">
-            @if ($isSuperAdmin && config('geoflow.update_center_enabled', true))
+            @if ($isSuperAdmin && config('geoflow.update_center_enabled', true) && config('geoflow.optional_admin_entries_enabled', false))
                 <a
                     class="gf-icon-button gf-icon-button--round"
                     href="{{ \App\Support\AdminWeb::routePath('admin.system-updates.index') }}"
